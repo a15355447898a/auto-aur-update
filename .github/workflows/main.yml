@@ -16,14 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         PKGBUILDs:
-        - koreader-bin
-#        - icalingua++
-        - listen1
-        - listen1-electron
-#        - clash-for-windows-electron-zh
-        - sabaki-electron
-
-
+        - aionui-bin
+        - mrrss-appimage
+        - orca-note-appimage
+        - any-code-appimage
 
     runs-on: ubuntu-latest
 #    if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
