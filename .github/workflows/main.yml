@@ -46,6 +46,7 @@ jobs:
           updpkgsums: true
 
   Task:
+    needs: UpdatePkg
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
