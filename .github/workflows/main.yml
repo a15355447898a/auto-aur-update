@@ -18,10 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         PKGBUILDs:
-        - aionui-bin
         - mrrss-appimage
         - orca-note-appimage
         - any-code-appimage
+        - openchamber-desktop-appimage
 
     runs-on: ubuntu-latest
 #    if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
