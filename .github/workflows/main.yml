@@ -47,6 +47,29 @@ jobs:
           allow_empty_commits: false
           updpkgsums: true
 
+      - name: Commit and push updated PKGBUILD
+        run: |
+          git config --local user.name "a15355447898a"
+          git config --local user.email "a15355447898a@outlook.com"
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git add "${{ matrix.PKGBUILDs }}/PKGBUILD" "${{ matrix.PKGBUILDs }}/.SRCINFO"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update ${{ matrix.PKGBUILDs }}"
+          for i in 1 2 3 4 5; do
+            git fetch origin main && git rebase origin/main || true
+            if git push origin HEAD:main; then
+              echo "Pushed successfully"
+              exit 0
+            fi
+            echo "Push conflict, retry $i"
+            sleep 5
+          done
+          echo "Failed to push after retries"
+          exit 1
+
   Task:
     needs: UpdatePkg
     runs-on: ubuntu-latest
@@ -63,8 +86,8 @@ jobs:
 
     - name: Commit and Push
       run: |
-        git config --local user.email 1304024859@qq.com
-        git config --local user.name zzy-ac
+        git config --local user.email a15355447898a@outlook.com
+        git config --local user.name a15355447898a
         git add time.log
         git commit -m "update new time.log" || exit 0
         git pull --rebase origin main
