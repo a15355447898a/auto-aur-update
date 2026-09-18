@@ -22,6 +22,7 @@ jobs:
         - orca-note-appimage
         - any-code-appimage
         - openchamber-desktop-appimage
+        - zed-globalization
 
     runs-on: ubuntu-latest
 #    if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
@@ -29,6 +30,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Sync PKGBUILD from AUR
+        run: |
+          git clone --depth=1 "https://aur.archlinux.org/${{ matrix.PKGBUILDs }}.git" /tmp/aur-src
+          cp "/tmp/aur-src/PKGBUILD" "${{ matrix.PKGBUILDs }}/PKGBUILD"
+          rm -rf /tmp/aur-src
+
       - uses: ./build-aur-action
         with:
           pkgname: ${{ matrix.PKGBUILDs }}
