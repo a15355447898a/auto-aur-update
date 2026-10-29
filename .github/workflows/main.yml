@@ -33,6 +33,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Sync PKGBUILD from AUR
+        if: matrix.PKGBUILDs != 'jayjay-appimage'
         run: |
           git clone --depth=1 "https://aur.archlinux.org/${{ matrix.PKGBUILDs }}.git" /tmp/aur-src
           cp "/tmp/aur-src/PKGBUILD" "${{ matrix.PKGBUILDs }}/PKGBUILD"
@@ -44,7 +45,7 @@ jobs:
           pkgdir: ${{ matrix.PKGBUILDs }}
 
       - name: Publish AUR package
-        uses: KSXGitHub/github-actions-deploy-aur@master
+        uses: KSXGitHub/github-actions-deploy-aur@9901fcce90f4089145583a9ac8e828b0049e3a27
         with:
           pkgname: ${{ matrix.PKGBUILDs }}
           pkgbuild: ${{ matrix.PKGBUILDs }}/PKGBUILD
@@ -54,7 +55,7 @@ jobs:
           commit_message: Update AUR package
           ssh_keyscan_types: rsa,ecdsa,ed25519
           allow_empty_commits: false
-          updpkgsums: true
+          updpkgsums: ${{ matrix.PKGBUILDs != 'jayjay-appimage' }}
 
       - name: Commit and push updated PKGBUILD
         run: |
